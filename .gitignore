@@ -1,0 +1,9 @@
+data/*
+!data/.gitkeep
+*.parquet
+*.csv
+spark-warehouse/
+metastore_db/
+.ipynb_checkpoints/
+.venv/
+.DS_Store
