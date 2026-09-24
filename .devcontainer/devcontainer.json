@@ -13,7 +13,11 @@
         "ms-toolsai.jupyter",
         "-vscjava.vscode-java-pack",
         "-dbaeumer.vscode-eslint"
-      ]
+      ],
+      "settings": {
+        "python.analysis.languageServerMode": "light",
+        "python.analysis.indexing": false
+      }
     }
   }
 }
