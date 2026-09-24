@@ -1,4 +1,4 @@
-# Big Data Processing – FH Kufstein Tirol (DSIA, 3rd semester)
+# Big Data Processing – FH Kufstein Tirol (DSIA, 3rd semester) Winter Semester 2026/2027
 
 Hands-on material for the course. Everything runs in VS Code inside a **dev container**,
 so every student has the identical environment (Python 3.12, Java 17, pandas, Polars,
