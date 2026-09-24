@@ -6,10 +6,11 @@ DuckDB, PySpark, Delta Lake).
 
 ## Option A – GitHub Codespaces (recommended, nothing to install)
 1. Sign in to github.com (a free account is enough).
-2. On this repository: **Code → Codespaces → Create codespace on main**.
-3. Wait ~3 minutes for the first build. VS Code opens in your browser.
+2. On this repository: **Fork → Create fork**. Your own copy keeps your work.
+3. On **your fork**: **Code → Codespaces → Create codespace on main**.
+4. Wait ~3 minutes for the first build. VS Code opens in your browser.
    (Optional: open it in your local VS Code via the "Codespaces" extension.)
-4. In the terminal: `python get_data.py --months 6`
+5. In the terminal: `python get_data.py --months 6`
 
 💡 Stop your codespace when you are done (github.com/codespaces → ⋯ → Stop),
 otherwise it keeps using your free monthly hours.
