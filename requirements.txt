@@ -1,0 +1,12 @@
+# Session 1: single-node engines
+pandas>=2.2
+polars>=1.0
+duckdb>=1.1
+pyarrow>=17
+psutil
+matplotlib
+ipykernel
+requests
+# Session 2+: Spark & Lakehouse (Java 17 is provided by the dev container)
+pyspark>=4.0,<4.1
+delta-spark>=4.0,<4.1
