@@ -25,8 +25,9 @@ Students can get more free hours via the GitHub Student Developer Pack (educatio
 | # | Topic | Folder |
 |---|---|---|
 | 1 | Big Data 2026 – do you really need a cluster? | `session-01/` |
-| 2 | Volume I – Spark fundamentals | *coming* |
-| 3 | Volume II – Spark performance | *coming* |
-| 4 | Variety & Veracity – Lakehouse | *coming* |
-| 5 | Velocity – Stream processing with Kafka | *coming* |
-| 6 | Big Data for AI & production | *coming* |
+| 2 | Big Data 2026 – do you really need a cluster? Part II | `session-01/`Update |
+| 3 | Volume I – Spark fundamentals | *coming* |
+| 4 | Volume II – Spark performance | *coming* |
+| 5 | Variety & Veracity – Lakehouse | *coming* |
+| 6 | Velocity – Stream processing with Kafka | *coming* |
+| 7 | Big Data for AI & production | *coming* |
