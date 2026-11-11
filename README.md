@@ -107,13 +107,16 @@ broker check and troubleshooting: [`session-06/README.md`](session-06/README.md)
    the old `kafka-python 2.0.2` does not work on Python 3.12).
 2. Start a broker – choose **one** route:
 
-| Route | Needs | Start (in `session-06/`) |
+| Route | Needs | Start (first `cd session-06`) |
 |---|---|---|
-| **A – Docker** | Docker Desktop | `docker compose up -d` (broker image `apache/kafka:4.4.0`, ~240 MB; optional web UI: `docker compose --profile ui up -d`) |
+| **A – Docker** | Docker Desktop | `cd session-06` → `docker compose up -d` (broker image `apache/kafka:4.4.0`, ~240 MB; optional web UI: `docker compose --profile ui up -d`) |
 | **B – native Kafka** | Java 17+ (macOS, Linux, WSL or the Codespace) | `python get_kafka.py --start` (downloads Kafka 4.4.0, ~130 MB) |
 
 ⚠️ **Route B fails if the folder path contains a space** (e.g. `… Kopie` or `My Projects`). `get_kafka.py` checks this and stops –
 then install Kafka somewhere else: `python get_kafka.py --dest ~/kafka-course --start`.
+
+`docker compose` only finds `docker-compose.yml` in `session-06/` – run it from the repo root and you get
+`no configuration file provided: not found`.
 
 Your Python code connects to `localhost:9092`. If neither route works on your laptop, pair up with a neighbour.
 

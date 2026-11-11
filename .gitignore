@@ -7,3 +7,15 @@ metastore_db/
 .ipynb_checkpoints/
 .venv/
 .DS_Store
+
+# Session 6: Kafka download, broker data, copied segment
+session-06/kafka_2.13-*/
+session-06/kafka-data/
+session-06/segment.log
+
+# Teacher material (solutions) - never commit
+session-*/teacher/
+
+# Python bytecode
+__pycache__/
+*.pyc

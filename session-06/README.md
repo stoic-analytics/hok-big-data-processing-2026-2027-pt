@@ -106,6 +106,8 @@ Route B uses ~140 MB in `kafka_2.13-4.4.0/` + `kafka-data/` – both are ignored
 | `Cannot connect to the Docker daemon` / `docker: command not found` | Start Docker Desktop and wait until it says *running*; open a new terminal |
 | `no configuration file provided: not found` | You are in the repo root → `cd session-06`, then `docker compose up -d` again. All `docker compose` commands (also `stop`/`down`) must run in `session-06/` |
 | `Could not open requirements file: requirements-local.txt` | It lives in the repo root → `cd ..` first, or `pip install -r ../requirements-local.txt` |
+| `consumer.py` prints `ASSIGNED partitions []` (several times) | Topic `user-events` does not exist yet – normal if you start the consumer first. Start `producer.py` (it creates the topic); the consumer gets its partitions within a few seconds |
+| `can't open file '…/producer.py'` | You are in the repo root → `cd session-06` |
 | `port is already allocated` (9092 or 8080) | Another Kafka is running: `docker ps`, stop it – or stop your Route B broker |
 | `Classpath is empty` | The Kafka folder path contains a space → `python get_kafka.py --dest ~/kafka-course` |
 | `No working Java found` / `UnsupportedClassVersionError` | Install Java 17+ (Route B), or use Docker |
