@@ -1,0 +1,56 @@
+# Session 6 – one Kafka broker in Docker (KRaft mode, no ZooKeeper)
+#
+#   docker compose up -d                 start the broker (first time: downloads the image, ~240 MB)
+#   docker compose --profile ui up -d    broker + web UI on http://localhost:8080 (optional)
+#   docker compose logs -f broker        watch the log (Ctrl+C stops watching, not the broker)
+#   docker compose down                  stop and delete the container – all topics and messages are gone
+#
+# Your Python code on the laptop connects to localhost:9092.
+# CLI tools run INSIDE the container:  docker exec -it broker /opt/kafka/bin/kafka-topics.sh ...
+
+services:
+  broker:
+    image: apache/kafka:4.4.0
+    container_name: broker
+    ports:
+      - "9092:9092"        # laptop -> broker
+    environment:
+      # --- KRaft: this one node is broker AND controller ---
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+
+      # --- Listeners: other containers use broker:19092, your laptop uses localhost:9092 ---
+      KAFKA_LISTENERS: PLAINTEXT://:19092,PLAINTEXT_HOST://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:19092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+
+      # --- Where the log segments live inside the container (used in the CLI lab) ---
+      KAFKA_LOG_DIRS: /tmp/kafka-logs
+
+      # --- Single node: replication factor 1 everywhere ---
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_SHARE_COORDINATOR_STATE_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_SHARE_COORDINATOR_STATE_TOPIC_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+      # --- Same course settings as get_kafka.py (route B) ---
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"   # you create topics yourself
+      KAFKA_NUM_PARTITIONS: 1
+      KAFKA_LOG_SEGMENT_BYTES: 1048576           # 1 MB segments -> several .log files appear quickly
+
+  kafka-ui:                  # optional web UI, only started with --profile ui
+    image: kafbat/kafka-ui:v1.5.0
+    container_name: kafka-ui
+    profiles: ["ui"]
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:19092
+    depends_on:
+      - broker

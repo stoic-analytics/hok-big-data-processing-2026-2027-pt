@@ -17,3 +17,7 @@ matplotlib
 # Notebooks and system information
 ipykernel
 psutil
+
+# Kafka lab (Python client + fake test data)
+kafka-python>=3.0,<4
+faker

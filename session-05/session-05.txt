@@ -1,0 +1,2 @@
+In this session we were working on the Kaggle following Kaggle notebook:
+https://www.kaggle.com/code/tutama/hok-big-data-processing-tutama/
