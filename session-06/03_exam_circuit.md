@@ -61,34 +61,27 @@ One `count()` starts a *job* – how is it split into *stages* and *tasks*?
 
 ---
 
-## Station 4 – Spark execution and joins: read the plan  (Sessions 2, 4 · 10 P)
+## Station 4 – Spark execution: lazy evaluation and shuffles  (Sessions 2, 4 · 10 P)
 
 **4.1 (2 P)** Transformation or action? `filter`, `count`, `groupBy().agg()`, `show`, `withColumn`, `write.parquet`.
 
-**4.2 (5 P)** A colleague ran `.explain()` and sends you this physical plan (shortened):
+**4.2 (5 P)** Look at this PySpark code (the line numbers are not part of the code):
+```python
+1  df = spark.read.parquet("yellow_tripdata.parquet")
+2  df = df.filter(col("trip_distance") > 0)
+3  df = df.withColumn("distance_km", col("trip_distance") * 1.609)
+4  result = df.groupBy("PULocationID").agg(avg("distance_km").alias("avg_km"))
+5  result.show(5)
 ```
-AdaptiveSparkPlan isFinalPlan=false
-+- Sort [trips#120L DESC NULLS LAST], true, 0
-   +- Exchange rangepartitioning(trips#120L DESC NULLS LAST, 200)
-      +- HashAggregate(keys=[Zone#45], functions=[count(1)])
-         +- Exchange hashpartitioning(Zone#45, 200)
-            +- HashAggregate(keys=[Zone#45], functions=[partial_count(1)])
-               +- Project [Zone#45]
-                  +- BroadcastHashJoin [PULocationID#7], [LocationID#44], Inner, BuildRight
-                     :- Filter (isnotnull(trip_distance#4) AND (trip_distance#4 > 0.0))
-                     :  +- FileScan parquet [trip_distance#4,PULocationID#7]
-                     :       PushedFilters: [IsNotNull(trip_distance), GreaterThan(trip_distance,0.0)],
-                     :       ReadSchema: struct<trip_distance:double,PULocationID:int>
-                     +- BroadcastExchange HashedRelationBroadcastMode(...)
-                        +- FileScan csv [LocationID#44,Zone#45]
-```
-(a) Describe in one sentence what the query computes. (1 P)
-(b) How many **shuffles** does the plan contain, and which operations cause them? (2 P)
-(c) Which table is broadcast, and why is that a good choice here? (1 P)
-(d) What do `PushedFilters` and `ReadSchema` tell you about how much data Spark reads? (1 P)
+(a) After lines 1–4, Spark has not processed any trips yet. Why not? Which line starts the actual work? (2 P)
+(b) Which of lines 2, 3 and 4 is a **wide** transformation? Explain why it needs a shuffle. (2 P)
+(c) How many shuffles does this job have, and into how many **stages** does Spark split it? (1 P)
 
-**4.3 (3 P)** A 2 GB CSV file, `spark.sql.files.maxPartitionBytes` = 128 MB, a machine with 4 cores.
-About how many partitions and tasks, and how many "waves" of tasks? What happens if the data had only 2 partitions?
+**4.3 (3 P)** Spark splits a 2 GB (= 2048 MB) file into partitions of 128 MB each. Each partition is processed by one
+**task**. Your laptop has 4 cores, and each core works on one task at a time.
+(a) How many partitions, and therefore tasks, does Spark create? (1 P)
+(b) How many rounds ("waves") are needed until all tasks are done? (1 P)
+(c) If the file had only 2 partitions, how many of the 4 cores would be busy? Name one function that fixes this. (1 P)
 
 &nbsp;
 &nbsp;
