@@ -20,6 +20,16 @@ Every step shows two variants. Use **one** of them for the whole block.
 | Where the data lives | `/tmp/kafka-logs/` inside the container | `kafka-data/` next to the Kafka folder |
 | Works in | PowerShell, macOS/Linux terminal | macOS/Linux/WSL terminal |
 
+**Route A only** – start the broker from inside `session-06/` (that is where `docker-compose.yml` lives; from the repo
+root you get `no configuration file provided: not found`):
+```bash
+cd session-06
+docker compose up -d
+docker compose ps                    # broker → running
+```
+The `docker exec …` commands below then work from any folder. Docker Desktop may print a
+`What's next: Try Docker Debug …` hint after each command – ignore it (or switch it off with `export DOCKER_CLI_HINTS=false`).
+
 **Route B only** – once per terminal, in the folder where `get_kafka.py` installed Kafka
 (`session-06/`, or the folder you gave with `--dest`):
 ```bash
@@ -78,6 +88,7 @@ Topic: cli-demo  TopicId: …  PartitionCount: 3  ReplicationFactor: 1  Configs:
 | `Leader` | id of the broker that handles reads and writes for this partition |
 | `Replicas` | all brokers that keep a copy (here only broker 1) |
 | `Isr` | **in-sync replicas**: the copies that are fully up to date. Only these can become the new leader without losing data |
+| `Elr`, `LastKnownElr` | *eligible leader replicas* (newer Kafka feature) – empty with one broker, you can ignore them |
 
 ✏️ **Question:** in a cluster with 3 brokers and replication factor 3, what would `Replicas` and `Isr` look like? What changes in `Isr` if one broker crashes?
 
