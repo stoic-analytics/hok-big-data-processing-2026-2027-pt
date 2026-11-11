@@ -4,11 +4,14 @@ Hands-on material for the course. You work in **two places**:
 
 | Where | What runs there |
 |---|---|
-| **Your laptop** – VS Code + Python 3.12 in a virtual environment | pandas, Polars, DuckDB, file formats, scikit-learn |
+| **Your laptop** – VS Code + Python 3.12 in a virtual environment | pandas, Polars, DuckDB, file formats, scikit-learn, Kafka (Session 6) |
 | **Kaggle** – free notebooks in the browser | Apache Spark and Spark ML (no Java setup on your laptop) |
 
 **AI rule for the labs:** AI assistants are allowed, but you must be able to explain every line.
 The exam is without AI.
+
+**Written exam: 27.11.2026** – 60 min, 60 points, no AI. Preparation material: [`session-06/03_exam_circuit.md`](session-06/03_exam_circuit.md)
+and [`session-06/04_mock_exam.md`](session-06/04_mock_exam.md).
 
 ---
 
@@ -66,7 +69,7 @@ and [`session-04/README.md`](session-04/README.md).
 ### Which requirements file?
 | File | Contains | Use it for |
 |---|---|---|
-| `requirements-local.txt` | pandas, Polars, DuckDB, PyArrow, scikit-learn, plots | **your laptop** (default) |
+| `requirements-local.txt` | pandas, Polars, DuckDB, PyArrow, scikit-learn, plots, kafka-python 3.x + Faker (Session 6) | **your laptop** (default) |
 | `requirements.txt` | the above **+ PySpark 4.0 and Delta Lake** (needs Java 17+) | the dev container, or a laptop with Java 17 installed |
 
 ---
@@ -95,16 +98,37 @@ A Codespace has 8 GB RAM and effectively one physical CPU core: fine for learnin
 
 ---
 
+## Kafka lab (Session 6)
+
+Session 6 runs a real Kafka broker on your laptop. Set it up **at home before the session** – full instructions,
+broker check and troubleshooting: [`session-06/README.md`](session-06/README.md).
+
+1. Update your environment: activate `.venv`, then `pip install -r requirements-local.txt` (adds **kafka-python 3.x** and **Faker**;
+   the old `kafka-python 2.0.2` does not work on Python 3.12).
+2. Start a broker – choose **one** route:
+
+| Route | Needs | Start (in `session-06/`) |
+|---|---|---|
+| **A – Docker** | Docker Desktop | `docker compose up -d` (broker image `apache/kafka:4.4.0`, ~240 MB; optional web UI: `docker compose --profile ui up -d`) |
+| **B – native Kafka** | Java 17+ (macOS, Linux, WSL or the Codespace) | `python get_kafka.py --start` (downloads Kafka 4.4.0, ~130 MB) |
+
+⚠️ **Route B fails if the folder path contains a space** (e.g. `… Kopie` or `My Projects`). `get_kafka.py` checks this and stops –
+then install Kafka somewhere else: `python get_kafka.py --dest ~/kafka-course --start`.
+
+Your Python code connects to `localhost:9092`. If neither route works on your laptop, pair up with a neighbour.
+
+---
+
 ## Sessions and folders
 
 | Folder | Topic | Runs on |
 |---|---|---|
 | `session-01/` | Do you really need a cluster? Threads vs. processes, pandas vs. Polars vs. DuckDB, Parquet vs. CSV, bonus: Python without the GIL | laptop |
 | `session-02/` | Apache Spark fundamentals: SparkSession, transformations vs. actions, plans, shuffles, joins | dev container or a laptop with Java 17 |
-| `session-03/` | Groups | Google Drive |
+| *(Session 3 – no folder)* | Groups Work | Google Drive |
 | `session-04/` | Reproducible Python (venv, pyenv, uv), CSV vs. pickle vs. Parquet, DuckDB as a database file, Spark fundamentals + Spark ML | laptop (Labs A–C) · Kaggle (Lab D) |
-
-**Coming:** Stream processing with Kafka and Spark Structured Streaming. I'm pumped!
+| *(Session 5 – no folder)* | Stream processing with Kafka – theory: events, append-only logs, topics and partitions, replication, KRaft | Kaggle |
+| `session-06/` | Kafka lab: broker and CLI (`01_kafka_cli.md`), Python producers and consumers (`02_kafka_python.ipynb`, `producer.py`, `consumer.py`), consumer groups · exam preparation (`03_exam_circuit.md`, `04_mock_exam.md`) | laptop with Docker or native Kafka (Java 17+) |
 
 Every lab ends with **exam-style questions** – they are the best preparation for the written exam.
 
@@ -112,4 +136,5 @@ Every lab ends with **exam-style questions** – they are the best preparation f
 
 ## Never commit
 `data/`, `.venv/`, executed notebooks with large outputs, or files with personal information.
-The `.gitignore` already excludes data files, virtual environments and caches.
+The `.gitignore` already excludes data files, virtual environments and caches, as well as the Kafka download and broker data
+from Session 6 (`session-06/kafka_2.13-*/`, `session-06/kafka-data/`).
